@@ -3,12 +3,10 @@
 #include <getopt.h>
 #include <hidapi.h>
 
+#include "hidutils.h"
 #include "ledzones.h"
 
 #define VERSION "1.0.0"
-#define INTEL_ARC_A770_VID  0x2516  // Vendor ID
-#define INTEL_ARC_A770_PID  0x01B5  // Produce ID
-#define INTEL_ARC_A770_INT  0x01    // RGB Interface
 
 void print_copyright() {
     printf("Intel ARC A770 Limited Edition LED Utility v%s\n", VERSION);
@@ -25,37 +23,6 @@ void print_help(const char *prog_name) {
     print_copyright();
 }
 
-hid_device* get_intel_a770_le_hid() {
-    struct hid_device_info *devs, *cur_dev;
-    hid_device *handle = NULL;
-
-    devs = hid_enumerate(INTEL_ARC_A770_VID, INTEL_ARC_A770_PID);
-    cur_dev = devs;
-
-    while (cur_dev) {
-        printf("path: %s, interface: %d\n", cur_dev->path, cur_dev->interface_number);
-        if (cur_dev->interface_number == INTEL_ARC_A770_INT) {
-            printf("Found target device: %s (Interface: %d)\n", 
-                cur_dev->path, cur_dev->interface_number);
-
-            handle = hid_open_path(cur_dev->path);
-            if (handle) {
-                // Double-check: confirm interface 1
-                if (cur_dev->interface_number == 1) {
-                    break;
-                } else {
-                    hid_close(handle);
-                    handle = NULL;
-                }
-            }
-        }
-        cur_dev = cur_dev->next;
-    }
-
-    hid_free_enumeration(devs);
-    return handle;
-}
-
 int main(int argc, char *argv[]) {
     static struct option long_options[] = {
         {"help",    no_argument, 0, 'h'},
@@ -70,9 +37,6 @@ int main(int argc, char *argv[]) {
                 print_help(argv[0]);
                 return 0;
             case 'v':
-//                printf("Intel ARC A770 Limited Edition LED Utility v%s\n", VERSION);
-//                printf("Copyright (C) 2026 Steve Rainwater.\n");
-//                printf("This is free software released under then GPLv3+\n");
                 print_copyright();
                 return 0;
             default:
@@ -89,7 +53,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Now proceed with your handshake and commands as before...
+    // do stuff here
 
     hid_close(dev);
     hid_exit();
