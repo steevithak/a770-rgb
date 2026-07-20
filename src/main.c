@@ -3,6 +3,8 @@
 #include <getopt.h>
 #include <hidapi.h>
 
+#include "ledzones.h"
+
 #define VERSION "1.0.0"
 #define INTEL_ARC_A770_VID  0x2516  // Vendor ID
 #define INTEL_ARC_A770_PID  0x01B5  // Produce ID
