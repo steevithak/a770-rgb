@@ -14,7 +14,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(hidapi)
 
-add_executable(a770-rgb src/main.c)
+add_executable(a770-rgb src/main.c src/ledzones.c)
 
 target_link_libraries(a770-rgb PRIVATE hidapi::hidapi)
 
