@@ -6,12 +6,15 @@
 
 typedef struct {
     const char* name;
-    const unsigned int* leds;
+    const char* desc;
+    const uint8_t* leds;
     const size_t count;
 } led_zone;
 
 // Accessor for the zones array
 extern const led_zone zones[];
 extern const size_t num_zones;
+
+void print_zones();
 
 #endif

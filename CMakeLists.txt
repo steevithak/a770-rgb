@@ -21,4 +21,3 @@ target_link_libraries(a770-rgb PRIVATE hidapi::hidapi)
 target_include_directories(a770-rgb PRIVATE
     ${hidapi_SOURCE_DIR}/hidapi
 )
-

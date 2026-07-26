@@ -1,11 +1,15 @@
 
 #include <stdio.h>
+#include <string.h>
+
 #include "hidutils.h"
 
 #define INTEL_ARC_A770_VID  0x2516  // Vendor ID
 #define INTEL_ARC_A770_PID  0x01B5  // Produce ID
 #define INTEL_ARC_A770_INT  0x01    // RGB Interface
 #define HID_TIMEOUT         250     // ms
+#define HID_PACKET_SIZE      65     // bytes
+
 
 // Look for an Intel Arc A770 Limited Edition RGB controller HID
 // and return a hid_device handle if we find one
@@ -120,5 +124,46 @@ int set_apply_mode(hid_device *dev) {
 
 
 // Send direct LED command
-// coming soon...
+// The Coolermaster HID protocol allows a 65 byte command buffer.
+// The first 5 bytes are reserved, leaving 60 bytes for LED data.
+// Each LED+Color takes 4 bytes, giving use room for 15 LEDs per command
+int set_color(unsigned int size, const unsigned char *leds, const unsigned char *color, hid_device *dev) {
+    const unsigned int cmd_max_leds = 15;
+    const unsigned int payload_offset = 5;
+
+    unsigned char buf[HID_PACKET_SIZE] = {0};
+    unsigned int sent = 0;
+
+    // process the list of LEDs
+    while ( sent < size ) {
+        // how many LEDs can we send in this batch?
+        unsigned int cmd_size = (size - sent > cmd_max_leds) ? cmd_max_leds : (size - sent);
+
+        // set up next packet
+        memset(buf, 0, HID_PACKET_SIZE);
+        buf[1] = 0xc0;
+        buf[2] = 0x01;
+        buf[3] = cmd_size;
+        buf[4] = 0x00;
+
+        // process the next batch LEDs
+        unsigned int bindex = payload_offset;
+        for(unsigned int i = 0; i < cmd_size; i++) {
+printf("processing LED: 0x%02x color: 0x%02x%02x%02x\n",leds[sent+i], color[0], color[1], color[2]);
+            buf[bindex++] = leds[sent + i]; // LED address
+            if(leds[sent + i] == 0x96) {        // Logo White LED
+                buf[bindex++] = color[0];            // Level
+                buf[bindex++] = 0x00;
+                buf[bindex++] = 0x00;
+            } else {                                 // RGB LED
+                buf[bindex++] = color[0];            // Red
+                buf[bindex++] = color[1];            // Green
+                buf[bindex++] = color[2];            // Blue
+            }
+        }
+        int res = hid_write_and_read(dev, buf, 65);
+        sent += cmd_size;
+    }
+}
+
 
