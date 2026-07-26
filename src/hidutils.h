@@ -9,5 +9,8 @@ int get_firmware_version(hid_device *dev);
 int set_enable_mode(hid_device *dev);
 int set_apply_mode(hid_device *dev);
 int set_color(unsigned int size, const unsigned char *leds, const unsigned char *color, hid_device *dev);
+void dump_hid_packet(unsigned char *buf, size_t len);
+
+extern int debug;
 
 #endif

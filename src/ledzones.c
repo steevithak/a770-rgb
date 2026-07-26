@@ -32,7 +32,8 @@ const led_zone zones[] = {
 const size_t num_zones = 5;
 
 
-void print_zones() {
+void print_zones()
+{
     for (size_t i = 0; i < num_zones; i++) {
         // zone name, led count, and arg desc
         printf("Zone: %s (Count: %u) - %s\n", zones[i].name, zones[i].count, zones[i].desc);

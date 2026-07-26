@@ -17,4 +17,6 @@ extern const size_t num_zones;
 
 void print_zones();
 
+extern int debug;
+
 #endif

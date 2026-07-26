@@ -1,2 +1,6 @@
 # Intel Arc A770 Limited Edition
-SUBSYSTEMS=="usb|hidraw", ATTRS{idVendor}=="2516", ATTRS{idProduct}=="01b5", TAG+="uaccess", TAG+="Intel_Arc_A770_Limited_Edition"
+# copy to /etc/udev/rules.d
+# sudo udevadm control --reload
+# sudo udevadm trigger
+SUBSYSTEMS=="hidraw", ATTRS{idVendor}=="2516", ATTRS{idProduct}=="01b5", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="2516", ATTRS{idProduct}=="01b5", MODE="0666"
