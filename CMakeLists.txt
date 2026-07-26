@@ -7,7 +7,10 @@ find_package(hidapi QUIET)
 # If that fails try work-around for Ubuntu
 if(NOT hidapi_FOUND)
     find_package(PkgConfig REQUIRED)
-    pkg_check_modules(hidapi REQUIRED hidapi)
+    pkg_check_modules(hidapi QUIET hidapi)
+    if(NOT hidapi_FOUND)
+        pkg_check_modules(hidapi REQUIRED hidapi-hidraw)
+    endif()
 endif()
 
 add_executable(a770-rgb src/main.c src/hidutils.c src/ledzones.c)
