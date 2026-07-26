@@ -1,4 +1,5 @@
 /build/
+/cmake/
 *.o
 *.a
 a770-rgb
