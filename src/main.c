@@ -8,7 +8,7 @@
 #include "hidutils.h"
 #include "ledzones.h"
 
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 
 int debug = 0;  // global debug flag
 
@@ -37,8 +37,8 @@ void print_help(char *prog_name)
     printf("Examples:\n");
     printf("  %s --list                  # List zone names and LED addresses\n", name);
     printf("  %s --zone fan1 ff0000      # Set fan 1 to bright red\n", name);
-    printf("  %s --zone logo 22          # Set logo to dim white\n", name);
-    printf("  %s --zone led 0x84 00ff00  # Set LED 0x84 to green\n", name);
+    printf("  %s --zone logo 22          # Set logo brightness (range 0-255)\n", name);
+    printf("  %s --led 0x84 00ff00       # Set LED 0x84 to green\n", name);
     printf("  %s 550055                  # Set all LEDs (except logo) to purple\n", name);
     printf("  %s off                     # Turn off all LEDs (including logo)\n", name);
     printf("\n");
